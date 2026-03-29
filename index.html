@@ -1,251 +1,932 @@
 <!DOCTYPE html>
-<!-- saved from url=(0014)about:internet -->
-<html lang=" en-US"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NLP Class Project | Spring 2026 CSCI 5541 | University of Minnesota</title>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stack OverFlowers | Spring 2026 CSCI 5541 NLP Project</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-soft: #0b1728;
+      --surface: rgba(13, 25, 44, 0.72);
+      --surface-strong: rgba(18, 34, 58, 0.88);
+      --text: #eaf2ff;
+      --muted: #a9b8d0;
+      --line: rgba(255, 255, 255, 0.1);
+      --primary: #7c3aed;
+      --secondary: #06b6d4;
+      --accent: #22c55e;
+      --glow: 124, 58, 237;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+      --radius: 24px;
+      --max: 1180px;
+    }
 
-  <link rel="stylesheet" href="./files/bulma.min.css" />
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(124, 58, 237, 0.22), transparent 28%),
+        radial-gradient(circle at top right, rgba(6, 182, 212, 0.18), transparent 24%),
+        radial-gradient(circle at bottom center, rgba(34, 197, 94, 0.10), transparent 20%),
+        linear-gradient(180deg, #06101c 0%, #081321 42%, #050b15 100%);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-  <link rel="stylesheet" href="./files/styles.css">
-  <link rel="preconnect" href="https://fonts.gstatic.com/">
-  <link href="./files/css2" rel="stylesheet">
-  <link href="./files/css" rel="stylesheet">
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: linear-gradient(to bottom, rgba(255,255,255,0.38), transparent 78%);
+      pointer-events: none;
+      z-index: 0;
+    }
 
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
 
-  <base href="." target="_blank"></head>
+    .container {
+      width: min(calc(100% - 2rem), var(--max));
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
 
+    .glass {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
 
+    .nav {
+      position: sticky;
+      top: 16px;
+      z-index: 20;
+      margin: 16px auto 0;
+      width: min(calc(100% - 2rem), var(--max));
+      border-radius: 999px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(124,58,237,0.95), rgba(6,182,212,0.9));
+      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.35);
+      font-family: "Space Grotesk", sans-serif;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      padding: 10px 14px;
+      border-radius: 999px;
+      transition: 0.28s ease;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a:hover {
+      color: white;
+      background: rgba(255,255,255,0.08);
+      transform: translateY(-1px);
+    }
+
+    .hero {
+      padding: 80px 0 38px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .hero-card,
+    .side-card,
+    .section-card,
+    .metric,
+    .member-card,
+    .teaser-card,
+    .table-wrap,
+    .footer-card {
+      border-radius: var(--radius);
+    }
+
+    .hero-card {
+      padding: 42px;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top right, rgba(6,182,212,0.18), transparent 30%),
+        radial-gradient(circle at left center, rgba(124,58,237,0.24), transparent 42%),
+        var(--surface);
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -80px -80px auto;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(255,255,255,0.18), transparent 60%);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.05);
+      color: #d3ddf1;
+      font-size: 0.86rem;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--secondary), var(--accent));
+      box-shadow: 0 0 20px rgba(34,197,94,0.8);
+    }
+
+    h1, h2, h3, h4 { margin: 0; }
+    h1 {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(2.6rem, 5vw, 4.6rem);
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+      margin-bottom: 18px;
+      max-width: 12ch;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #ffffff 0%, #b9e8ff 30%, #c7b8ff 64%, #8ef0d1 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 1.06rem;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 64ch;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 22px 0 28px;
+    }
+
+    .pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #d7e3f9;
+      font-size: 0.9rem;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      margin-top: 18px;
+    }
+
+    .btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-width: 160px;
+      padding: 14px 20px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      color: white;
+      font-weight: 600;
+      overflow: hidden;
+      transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+      isolation: isolate;
+    }
+
+    .btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(124,58,237,0.95), rgba(6,182,212,0.95));
+      transition: transform 0.35s ease;
+      z-index: -2;
+    }
+
+    .btn::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(255,255,255,0.18), rgba(255,255,255,0));
+      transform: translateX(-110%);
+      transition: transform 0.45s ease;
+      z-index: -1;
+    }
+
+    .btn:hover {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 18px 40px rgba(var(--glow), 0.28);
+      border-color: rgba(255,255,255,0.18);
+    }
+
+    .btn:hover::before {
+      transform: scale(1.06);
+    }
+
+    .btn:hover::after {
+      transform: translateX(0);
+    }
+
+    .btn.secondary::before {
+      background: linear-gradient(120deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+    }
+
+    .btn.secondary:hover {
+      box-shadow: 0 18px 40px rgba(6, 182, 212, 0.18);
+    }
+
+    .side-stack {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      gap: 28px;
+    }
+
+    .side-card {
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .kpi-value {
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      font-weight: 800;
+      line-height: 1;
+      font-family: "Space Grotesk", sans-serif;
+    }
+
+    .kpi-label,
+    .card-copy,
+    .section-card p,
+    li,
+    td,
+    th,
+    figcaption {
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    main section {
+      padding: 18px 0;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 18px;
+    }
+
+    .section-head p {
+      max-width: 70ch;
+      color: var(--muted);
+    }
+
+    h2 {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 22px;
+    }
+
+    .section-card {
+      padding: 28px;
+      grid-column: span 12;
+    }
+
+    .split-left { grid-column: span 7; }
+    .split-right { grid-column: span 5; }
+    .half { grid-column: span 6; }
+    .third { grid-column: span 4; }
+
+    .section-card h3 {
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+    }
+
+    .bullet-list {
+      margin: 14px 0 0;
+      padding-left: 18px;
+    }
+
+    .teaser-card {
+      padding: 18px;
+      overflow: hidden;
+    }
+
+    .figure-wrap {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .figure-wrap img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .figure-wrap:hover img {
+      transform: scale(1.04);
+    }
+
+    .figure-overlay {
+      position: absolute;
+      inset: auto 18px 18px 18px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(4, 10, 22, 0.72);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .metric {
+      padding: 20px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+    }
+
+    .metric:hover {
+      transform: translateY(-4px);
+      border-color: rgba(6,182,212,0.35);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.8rem;
+      color: white;
+      margin-bottom: 6px;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-top: 20px;
+    }
+
+    .member-card {
+      padding: 20px;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+    .member-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 38px rgba(0,0,0,0.28);
+      border-color: rgba(124,58,237,0.35);
+    }
+
+    .avatar {
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      margin: 0 auto 14px;
+      padding: 3px;
+      background: linear-gradient(135deg, rgba(124,58,237,1), rgba(6,182,212,1));
+    }
+
+    .avatar-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1f2f4d, #10192b);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+
+    .member-role {
+      font-size: 0.92rem;
+      color: #c3d3ee;
+      margin-top: 6px;
+    }
+
+    .table-wrap {
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      margin-top: 18px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(255,255,255,0.02);
+    }
+
+    th, td {
+      padding: 16px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      text-align: left;
+    }
+
+    th {
+      color: white;
+      background: rgba(255,255,255,0.04);
+      font-weight: 600;
+    }
+
+    tr:hover td {
+      background: rgba(255,255,255,0.03);
+    }
+
+    .results-img {
+      margin-top: 18px;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .results-img img {
+      width: 100%;
+      aspect-ratio: 16 / 7;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .results-img:hover img {
+      transform: scale(1.03);
+    }
+
+    .footer {
+      padding: 26px 0 56px;
+    }
+
+    .footer-card {
+      padding: 28px;
+      text-align: center;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 16px;
+    }
+
+    .badge {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #d7e3f9;
+      font-size: 0.9rem;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cursor-glow {
+      position: fixed;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      pointer-events: none;
+      background: radial-gradient(circle, rgba(124,58,237,0.16), transparent 62%);
+      filter: blur(12px);
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      transition: opacity 0.3s ease;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .side-stack,
+      .team-grid,
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .split-left,
+      .split-right,
+      .half,
+      .third {
+        grid-column: span 12;
+      }
+
+      .nav {
+        border-radius: 24px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .hero-card,
+      .side-card,
+      .section-card,
+      .footer-card {
+        padding: 22px;
+      }
+
+      .nav {
+        position: static;
+        margin-top: 10px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .cta-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
 <body>
-  <div>
-    <div class="wrapper">
-      <h1 style="font-family: &#39;Lato&#39;, sans-serif;">Your Title Here</h1>
-      <h4 style="font-family: &#39;Lato&#39;, sans-serif; ">Spring 2026 CSCI 5541 NLP: Class Project - University of Minnesota</h4>
-      <h4 style="font-family: &#39;Lato&#39;, sans-serif; ">Stack OverFlowers</h4>
+  <div class="cursor-glow" id="cursorGlow"></div>
 
-      <div class="authors-wrapper">
-        
-        <div class="author-container">
-          <div class="author-image">
-              <img src="./files/WoochangShin.jpg">
-            
-            
-          </div>
-          <p>
-                        
-              Woochang Shin
-            
-          </p>
-        </div>
-        
-        <div class="author-container">
-          <div class="author-image">
-            
-            <img src="">
-            
-          </div>
-          <p>
-            
-            Jisun Kim
-            
-          </p>
-        </div>
-        
-        <div class="author-container">
-          <div class="author-image">
-            
-              <img src="">            
-            
-          </div>
-          <p>
-              Steven Hu
-          </p>
-        </div>
-        
-        <div class="author-container">
-          <div class="author-image">
-                        
-              <img src="">
-            
-          </div>
-          <p>
-            Samarth Kumar Samal
-          </p>
-        </div>
-        
+  <nav class="nav glass">
+    <div class="brand">
+      <div class="brand-badge">SO</div>
+      <div>
+        <div>Stack OverFlowers</div>
       </div>
-
-      <br/>
-
-      <div class="authors-wrapper">
-        <div class="publication-links">
-          <!-- Github link -->
-          <span class="link-block">
-            <a
-              href=""
-              target="_blank"
-              class="external-link button is-normal is-rounded is-dark is-outlined"
-            >
-            <span>Final Report</span>
-            </a>
-          </span>
-          <span class="link-block">
-            <a
-              href=""
-              target="_blank"
-              class="external-link button is-normal is-rounded is-dark is-outlined"
-            >
-            <span>Code</span>
-            </a>
-          </span>      
-          <span class="link-block">
-            <a
-              href=""
-              target="_blank"
-              class="external-link button is-normal is-rounded is-dark is-outlined"
-            >
-            <span>Model Weights</span>
-            </a>
-          </span>              
-        </div>
-      </div>
-
-
     </div>
-  </div>
+    <div class="nav-links">
+      <a href="#abstract">Abstract</a>
+      <a href="#teaser">Teaser</a>
+      <a href="#approach">Approach</a>
+      <a href="#results">Results</a>
+      <a href="#conclusion">Conclusion</a>
+    </div>
+  </nav>
 
+  <header class="hero container">
+    <div class="hero-grid">
+      <section class="hero-card glass reveal">
+        <div class="eyebrow">Spring 2026 · CSCI 5541 NLP · University of Minnesota</div>
+        <h1><span class="gradient-text">Your NLP Project,</span> presented like a real research launch.</h1>
+        <p class="hero-subtitle">
+          Replace the placeholder copy with your project title, research question, method, and outcomes.
+          This version is designed to feel modern, polished, and technical, with subtle motion, glassmorphism,
+          strong hover states, and a cleaner visual hierarchy.
+        </p>
+        <div class="hero-meta">
+          <span class="pill">Project Team · 4 Members</span>
+          <span class="pill">Research + Engineering</span>
+          <span class="pill">Interactive Showcase</span>
+        </div>
+        <div class="cta-row">
+          <a class="btn" href="#" target="_blank">Final Report</a>
+          <a class="btn secondary" href="#" target="_blank">Code Repository</a>
+          <a class="btn secondary" href="#" target="_blank">Model Weights</a>
+        </div>
+      </section>
 
+      <div class="side-stack reveal">
+        <aside class="side-card glass">
+          <div class="kpi">
+            <div class="kpi-value gradient-text">94.2%</div>
+            <div class="kpi-label">Example headline metric to highlight your strongest result or benchmark gain.</div>
+          </div>
+        </aside>
+        <aside class="side-card glass">
+          <h3 style="margin-bottom: 10px;">Project Snapshot</h3>
+          <p class="card-copy">
+            Add a two-line summary here: the task, dataset, model family, and what makes your approach notable.
+          </p>
+          <div class="badge-row" style="justify-content:flex-start; margin-top:18px;">
+            <span class="badge">Transformer</span>
+            <span class="badge">Evaluation</span>
+            <span class="badge">Human Analysis</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </header>
 
+  <main class="container">
+    <section id="team" class="reveal">
+      <div class="section-head">
+        <div>
+          <h2>Project Team</h2>
+          <p>Professional team cards with hover lift and gradient avatars. Replace initials with actual photos if you have them.</p>
+        </div>
+      </div>
+      <div class="team-grid">
+        <article class="member-card glass">
+          <div class="avatar"><div class="avatar-inner">WS</div></div>
+          <h3>Woochang Shin</h3>
+          <div class="member-role">Team Member</div>
+        </article>
+        <article class="member-card glass">
+          <div class="avatar"><div class="avatar-inner">JK</div></div>
+          <h3>Jisun Kim</h3>
+          <div class="member-role">Team Member</div>
+        </article>
+        <article class="member-card glass">
+          <div class="avatar"><div class="avatar-inner">SH</div></div>
+          <h3>Steven Hu</h3>
+          <div class="member-role">Team Member</div>
+        </article>
+        <article class="member-card glass">
+          <div class="avatar"><div class="avatar-inner">SS</div></div>
+          <h3>Samarth Kumar Samal</h3>
+          <div class="member-role">Team Member</div>
+        </article>
+      </div>
+    </section>
 
+    <section id="abstract" class="reveal">
+      <div class="section-grid">
+        <article class="section-card glass split-left">
+          <h2>Abstract</h2>
+          <p>
+            One or two sentences on the motivation behind the problem you are solving. One or two sentences describing the
+            approach you took. One or two sentences on the main result you obtained.
+          </p>
+          <div class="metrics-grid">
+            <div class="metric">
+              <strong>Task</strong>
+              <span>Summarize your core NLP problem.</span>
+            </div>
+            <div class="metric">
+              <strong>Method</strong>
+              <span>State the model or pipeline used.</span>
+            </div>
+            <div class="metric">
+              <strong>Impact</strong>
+              <span>Highlight your top takeaway.</span>
+            </div>
+          </div>
+        </article>
 
-  
-  
+        <article class="section-card glass split-right">
+          <h3>Why this layout works</h3>
+          <ul class="bullet-list">
+            <li>Clear visual hierarchy for title, team, and outcomes.</li>
+            <li>Interactive buttons with animated hover cover sweep.</li>
+            <li>Research-style sections in a more portfolio-grade presentation.</li>
+            <li>Reusable cards for metrics, figures, and qualitative insights.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
 
+    <section id="teaser" class="reveal">
+      <div class="section-head">
+        <div>
+          <h2>Teaser Figure</h2>
+          <p>Use this area to communicate the main idea of the project immediately. The hover zoom makes the figure feel more alive.</p>
+        </div>
+      </div>
+      <article class="teaser-card glass">
+        <div class="figure-wrap">
+          <img src="./files/teaser.png" alt="Teaser figure">
+          <div class="figure-overlay">
+            <strong style="display:block; margin-bottom:6px;">Main Project Idea</strong>
+            <span>Replace this caption with a concise explanation of what the figure demonstrates and why it matters.</span>
+          </div>
+        </div>
+      </article>
+    </section>
 
-  <div class="wrapper">
-    <hr>
-    
-    <h2 id="abstract">Abstract</h2>
+    <section id="introduction" class="reveal">
+      <div class="section-grid">
+        <article class="section-card glass half">
+          <h2>Introduction</h2>
+          <h3>What did you try to do?</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <h3>How is it done today?</h3>
+          <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        </article>
+        <article class="section-card glass half">
+          <h2>Motivation</h2>
+          <h3>Why does it matter?</h3>
+          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+          <h3>What difference could success make?</h3>
+          <p>Frame the practical value, research impact, or downstream application in a straightforward way.</p>
+        </article>
+      </div>
+    </section>
 
-<p>One or two sentences on the motivation behind the problem you are solving. One or two sentences describing the approach you took. One or two sentences on the main result you obtained.</p>
+    <section id="approach" class="reveal">
+      <div class="section-grid">
+        <article class="section-card glass split-left">
+          <h2>Approach</h2>
+          <p><strong style="color:white;">What did you do exactly?</strong><br>
+          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          <p><strong style="color:white;">What problems did you anticipate or encounter?</strong><br>
+          Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</p>
+        </article>
+        <article class="section-card glass split-right">
+          <h3>Implementation Highlights</h3>
+          <ul class="bullet-list">
+            <li>Dataset preparation and cleaning pipeline.</li>
+            <li>Model architecture or prompting workflow.</li>
+            <li>Training, validation, and ablation strategy.</li>
+            <li>Error analysis and observed failure cases.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
 
-<hr>
+    <section id="results" class="reveal">
+      <div class="section-head">
+        <div>
+          <h2>Results</h2>
+          <p>Mix quantitative findings with qualitative analysis. The table and image treatment below give this section a conference-demo feel.</p>
+        </div>
+      </div>
+      <article class="section-card glass">
+        <p>
+          <strong style="color:white;">How did you measure success?</strong><br>
+          Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+        </p>
 
-<h2 id="teaser">Teaser Figure</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Experiment</th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong style="color:white;">Sentence</strong></td>
+                <td>Example 1</td>
+                <td>Example 2</td>
+                <td>Example 3</td>
+              </tr>
+              <tr>
+                <td><strong style="color:white;">Errors</strong></td>
+                <td>error A, error B, error C</td>
+                <td>error C</td>
+                <td>error B</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-<p>A figure that conveys the main idea behind the project or the main application being addressed. This figure is from <a href="https://arxiv.org/pdf/2210.07469">StyLEx</a>.</p>
+        <div class="results-img">
+          <img src="./files/results.png" alt="Results visualization">
+        </div>
+      </article>
+    </section>
 
-<p class="sys-img"><img src="./files/teaser.png" alt="imgname"></p>
+    <section id="conclusion" class="reveal">
+      <div class="section-grid">
+        <article class="section-card glass third">
+          <h3>Reproducibility</h3>
+          <p>How easy is it for others to reproduce your findings?</p>
+        </article>
+        <article class="section-card glass third">
+          <h3>Limitations</h3>
+          <p>What are the model, dataset, or evaluation constraints?</p>
+        </article>
+        <article class="section-card glass third">
+          <h3>Future Work</h3>
+          <p>What extensions or follow-up research directions are promising?</p>
+        </article>
+      </div>
+    </section>
+  </main>
 
+  <footer class="footer container">
+    <div class="footer-card glass reveal">
+      <h2>Conclusion & Future Work</h2>
+      <p style="max-width: 72ch; margin: 12px auto 0; color: var(--muted);">
+        This version gives your course project the feel of a polished research showcase instead of a plain template page.
+        Swap in your final copy, links, images, and metrics, and it is ready for presentation or submission.
+      </p>
+      <div class="badge-row">
+        <span class="badge">Modern Visual Design</span>
+        <span class="badge">Animated Hover States</span>
+        <span class="badge">Responsive Layout</span>
+        <span class="badge">Project Showcase Ready</span>
+      </div>
+    </div>
+  </footer>
 
-<h3 id="the-timeline-and-the-highlights">Any subsection</h3>
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15 });
 
-<p>If you need to explain more about your figure</p>
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
 
-<hr>
+    const glow = document.getElementById('cursorGlow');
+    window.addEventListener('mousemove', (e) => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    });
 
-<h2 id="introduction">Introduction / Background / Motivation</h2>
+    window.addEventListener('mouseleave', () => {
+      glow.style.opacity = '0';
+    });
 
-<p>
-<b>What did you try to do? What problem did you try to solve? Articulate your objectives using absolutely no jargon.</b>
-</p>
-<p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-</p>
-
-<p>
-<b>How is it done today, and what are the limits of current practice?</b>
-</p>
-<p>
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-<p>
-
-<p>
-<b>Who cares? If you are successful, what difference will it make?</b>
-</p>
-<p>
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-</p>
-
-<hr>
-
-<h2 id="approach">Approach</h2>
-
-<p>
-<b>What did you do exactly? How did you solve the problem? Why did you think it would be successful? Is anything new in your approach?</b>
-</p>
-
-<p>
-Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-</p>
-
-<p>
-<b>What problems did you anticipate? What problems did you encounter? Did the very first thing you tried work?</b>
-</p>
-
-<p>
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-</p>
-
-<hr>
-    
-<h2 id="results">Results</h2>
-<p>
-<b>How did you measure success? What experiments were used? What were the results, both quantitative and qualitative? Did you succeed? Did you fail? Why?</b>
-</p>
-<p>
-Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-</p>
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: center"><strong>Experiment</strong></th>
-      <th style="text-align: center">1</th>
-      <th style="text-align: center">2</th>
-      <th style="text-align: center">3</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: center"><strong>Sentence</strong></td>
-      <td style="text-align: center">Example 1</td>
-      <td style="text-align: center">Example 2</td>
-      <td style="text-align: center">Example 3</td>
-    </tr>
-    <tr>
-      <td style="text-align: center"><strong>Errors</strong></td>
-      <td style="text-align: center">error A, error B, error C</td>
-      <td style="text-align: center">error C</td>
-      <td style="text-align: center">error B</td>
-    </tr>
-  </tbody>
-  <caption>Table 1. This is Table 1's caption</caption>
-</table>
-<br>
-<div style="text-align: center;">
-<img style="height: 300px;" alt="" src="./files/results.png">
-</div>
-<br><br>
-
-<hr>
-
-
-
-<h2 id="conclusion">Conclustion and Future Work</h2>
-<p>
-
-  How easily are your results able to be reproduced by others?
-  Did your dataset or annotation affect other people's choice of research or development projects to undertake?
-  Does your work have potential harm or risk to our society? What kinds? If so, how can you address them?
-  What limitations does your model have? How can you extend your work for future research?</p>
-
-
-<hr>
-
-
-  </div>
-  
-
-
-</body></html>
+    window.addEventListener('mouseenter', () => {
+      glow.style.opacity = '0.8';
+    });
+  </script>
+</body>
+</html>
